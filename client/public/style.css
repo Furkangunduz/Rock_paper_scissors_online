@@ -1,0 +1,96 @@
+*{
+    box-sizing: 0;
+    margin: 0;
+    font-family: monospace;
+}
+body{
+    height :100vh;
+    background-color: #A2D5AB;
+}
+
+.container{
+    display: flex;
+    text-align: center;
+    height: 100vh;
+    flex-direction: column;
+}
+.point{
+    display: flex;
+    font-size: 2rem;
+    justify-content: space-around;
+}
+.game-point{
+    display: flex;
+    flex-direction: column;
+    margin: 30px;
+    
+}
+.game-point span{
+    box-shadow: 0 7px #7e1b1b ;
+    margin-bottom: 20px;
+}
+
+.arm{
+    position: absolute;
+    left: 15px;
+    top: 30%;
+}
+
+.arm img{
+    width: 150px;
+    height: 150px;
+    object-fit:fill;    
+}
+
+.arm.active{
+    animation: MoveUpDown 1s linear 3;
+    
+}
+
+@keyframes MoveUpDown {
+    0%, 100% {
+      top: 30%;
+    }
+    50% {
+      top: 50%;
+    }
+} 
+.score{
+    display: flex;
+    font-size: 4rem;
+    justify-content: center;
+    align-items: center;
+}
+.score-box{
+    border: 3px solid black;
+    margin: 25px;
+    padding: 5px 15px;
+    background-color: white;
+}
+
+
+.chooses{
+    display: flex;
+    position: fixed;
+    bottom: 5%;
+    width: 100%;
+    justify-content: space-around;
+
+}
+.choose{
+    border-radius: 50%;
+    background-color: black;
+    padding:30px;
+    border: 2px solid rgb(217, 255, 0);
+    cursor: pointer;
+
+}
+.choose:hover{
+    background-color: rgb(65, 110, 110);
+}
+
+.choose img{
+    width: 75px;
+    height: 75px;
+    object-fit:fill;
+}
