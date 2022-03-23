@@ -58,7 +58,7 @@ body{
 }
 
 .left-arm.active{
-    animation: MoveUpDown .6s linear 3;
+    animation: MoveUpDown .5s linear 3;
 }
 
 .right-arm{

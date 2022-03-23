@@ -1,10 +1,10 @@
 const choices = document.querySelectorAll(".choice")
 
-const myPoint = document.getElementById("my-point")
-const oponnentPoint = document.getElementById("oponnent-point")
+const myPointArea = document.getElementById("my-point")
+const opponentPointArea = document.getElementById("opponent-point")
 
 const myScoreArea = document.getElementById("my-score")
-const opponnentScoreArea = document.getElementById("opponent-score")
+const opponentScoreArea = document.getElementById("opponent-score")
 
 const leftArm  = document.getElementById("left-arm")
 const rightArm = document.getElementById("right-arm")
@@ -12,12 +12,15 @@ const rightArm = document.getElementById("right-arm")
 const roomIdInput = document.getElementById("room-id")
 const joinRoomBtn =  document.getElementById("join-room")
 const createRoomBtn =  document.getElementById("create-room")
-const msg = document.getElementById("message")
+const msg    = document.getElementById("message")
 
 const loginScreen = document.getElementById("login-screen")
 const gameScreen = document.getElementById("game-screen")
-const winner = document.getElementById("who-win")
+const winlostText = document.getElementById("who-win")
 
+
+var audio = document.getElementById("myaudio"); 
+audio.volume = 0.02
 
 const socket = io("http://localhost:3000")
 
@@ -32,6 +35,8 @@ var playerOneMove;
 var playerTwoMove;
 var myscore = 0;
 var opponentscore = 0;
+var myPoint = 0;
+var opponentPoint = 0;
 
 roomIdInput.addEventListener("input",() => {
   msg.style.display = "none"
@@ -42,11 +47,13 @@ roomIdInput.addEventListener("input",() => {
 createRoomBtn.addEventListener("click",() => {
   const roomId = roomIdInput.value.trim()
   socket.emit("create-room",(roomId))
+  audio.play();
 })
 
 joinRoomBtn.addEventListener("click",() => {
   const roomId = roomIdInput.value.trim();
   socket.emit("join-room",(roomId))
+  audio.play();
 })
 
 
@@ -78,8 +85,8 @@ socket.on("player-2-connected",(roomid) => {
   }
 })
 
-socket.on("choices-from-server",(choices) => {
-  choices.forEach((e) => {
+socket.on("choices-from-server",(choicesfromserver) => {
+  choicesfromserver.forEach((e) => {
     if(e.id == socket.id){
       playerOneMove = e.choice;
     }else{
@@ -93,21 +100,44 @@ socket.on("choices-from-server",(choices) => {
     winner = whoWin(playerOneMove,playerTwoMove);
     if(winner == 1) {
       ++myscore; 
-      winner.innerText = "You Win !"
+      winlostText.innerText = "You Win !"
     }
     if(winner == 2) {
       ++opponentscore; 
-      winner.innerHtml = "You Lost !"
-      
+      winlostText.innerText = "You Lost !"  
     }
     myScoreArea.innerText = myscore
-    opponnentScoreArea.innerText = opponentscore 
-  },3000)
-  
-  
-  console.log(playerOneMove+" "+playerTwoMove);
-})
+    opponentScoreArea.innerText = opponentscore 
+    
+    if(myscore==3){
+      myscore = 0;
+      opponentscore = 0;
+      myScoreArea.innerText = myscore
+      opponentScoreArea.innerText = opponentscore 
+      ++myPoint;
+      myPointArea.innerText = myPoint
+    }
+    if(opponentscore==3){
+      myscore = 0;
+      opponentscore = 0;
+      myScoreArea.innerText = myscore
+      opponentScoreArea.innerText = opponentscore
+      ++opponentPoint;
+      opponentPointArea.innerText = opponentPoint
+    }
 
+
+
+    //reset for next 
+    choices.forEach((i) => {
+      i.className = "choice";
+    })
+    canChoose = false;
+    leftArm.classList.remove("active")
+    rightArm.classList.remove("active")
+  },1600)
+  
+})
 
 
 
