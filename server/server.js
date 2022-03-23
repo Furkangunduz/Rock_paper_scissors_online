@@ -1,9 +1,12 @@
-const express = require("express");
-const app = express();
-const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT);
+const express = require("express")
+const app = express()
+const PORT = process.env.PORT || 3000
+const server = app.listen(PORT)
 
-const {rooms,createRoom,joinRoom} = require("./server-func");
+const {rooms,createRoom,joinRoom} = require("./server-func")
+
+var choices = [];
+
 
 const io = require("socket.io")(server,{ 
     cors: {    
@@ -14,29 +17,46 @@ const io = require("socket.io")(server,{
 
 
 app.get("/",(req,res) => {
-    res.send("Server on");
+    res.send("Server on")
 })
 
 
 io.on("connection",(socket) => {
-    console.log(`new connection ${socket.id}`);
+    console.log(`new connection ${socket.id}`)
 
     socket.on("create-room",(roomid) => {
         if(rooms[roomid]) {
             socket.emit("error",("room already exist")) 
-            return;
+            return
         }
-    
-        createRoom(roomid,socket.id);
-        console.log(rooms[roomid])
+        createRoom(roomid,socket.id)
+        socket.join(roomid)
+        io.to(`${roomid}`).emit("player-1-connected",roomid);
+        socket.emit("message","Waiting for player. . .")
     })
+    
     socket.on("join-room",(roomid) => {
         if(!rooms[roomid]) {
             socket.emit("error",("cannot find the room")) 
-            return;
+            return
         }
         joinRoom(roomid,socket.id)
-        console.log(rooms[roomid])
+        
+        socket.join(roomid)
+        socket.emit("player-2-connected",roomid);
+        io.to(`${roomid}`).emit("player-2-connected",roomid);
+        socket.emit("message",("succesfuly joined"))
+    })
+
+    socket.on("choice",(choice,id,roomId) => {
+        let x ={"id": id,"choice":choice}
+        choices.push(x)
+        
+        if(choices.length == 2){
+            io.to(`${roomId}`).emit("choices-from-server",choices)
+            choices =[];
+        }
+
     })
     
 })  

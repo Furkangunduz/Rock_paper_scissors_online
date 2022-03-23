@@ -25,14 +25,15 @@ body{
     margin-top: 20px;
     font-size: 2rem;
     color: red;
+    
 }
 
 .container{
-    display: flex;
+    display: none;
     text-align: center;
     height: 100vh;
     flex-direction: column;
-    display: none;
+    
 }
 .point{
     display: flex;
@@ -70,12 +71,6 @@ body{
     animation: MoveUpDown .6s linear 3;
 }
 
-.arms img{
-    width: 150px;
-    height: 150px;
-    object-fit:fill;    
-}
-
 @keyframes MoveUpDown {
     0%, 100% {
       top: 30%;
@@ -83,7 +78,15 @@ body{
     50% {
       top: 50%;
     }
-} 
+}
+
+.arms img{
+    width: 150px;
+    height: 150px;
+    object-fit:fill;    
+}
+
+ 
 .score{
     display: flex;
     font-size: 4rem;
