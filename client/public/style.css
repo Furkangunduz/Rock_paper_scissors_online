@@ -8,11 +8,31 @@ body{
     background-color: #A2D5AB;
 }
 
+.login{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    height: 100%;
+    flex-direction: column;
+}
+.login img{
+    height: 200px;
+    width: 240px;
+    margin: 50px 0 100px;
+}
+.login .message{
+    margin-top: 20px;
+    font-size: 2rem;
+    color: red;
+}
+
 .container{
     display: flex;
     text-align: center;
     height: 100vh;
     flex-direction: column;
+    display: none;
 }
 .point{
     display: flex;
@@ -30,21 +50,30 @@ body{
     margin-bottom: 20px;
 }
 
-.arm{
+.left-arm{
     position: absolute;
     left: 15px;
     top: 30%;
 }
 
-.arm img{
+.left-arm.active{
+    animation: MoveUpDown .6s linear 3;
+}
+
+.right-arm{
+    position: absolute;
+    right: 15px;
+    top: 30%;
+}
+
+.right-arm.active{
+    animation: MoveUpDown .6s linear 3;
+}
+
+.arms img{
     width: 150px;
     height: 150px;
     object-fit:fill;    
-}
-
-.arm.active{
-    animation: MoveUpDown 1s linear 3;
-    
 }
 
 @keyframes MoveUpDown {
@@ -69,7 +98,7 @@ body{
 }
 
 
-.chooses{
+.choices{
     display: flex;
     position: fixed;
     bottom: 5%;
@@ -77,19 +106,26 @@ body{
     justify-content: space-around;
 
 }
-.choose{
+.choice{
     border-radius: 50%;
     background-color: black;
     padding:30px;
     border: 2px solid rgb(217, 255, 0);
     cursor: pointer;
-
 }
-.choose:hover{
+
+.disable{
+    border-radius: 50%;
+    background-color: rgb(70, 70, 70);
+    padding:30px;
+    border: 2px solid rgb(217, 255, 0);
+    cursor: not-allowed;
+}
+.choice:hover{
     background-color: rgb(65, 110, 110);
 }
 
-.choose img{
+.choices img{
     width: 75px;
     height: 75px;
     object-fit:fill;
