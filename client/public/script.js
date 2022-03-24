@@ -20,7 +20,7 @@ const winlostText = document.getElementById("who-win")
 
 
 var audio = document.getElementById("myaudio"); 
-audio.volume = 0.02
+audio.volume = 0.001
 
 const socket = io("http://localhost:3000")
 
@@ -106,6 +106,9 @@ socket.on("choices-from-server",(choicesfromserver) => {
       ++opponentscore; 
       winlostText.innerText = "You Lost !"  
     }
+    if(winner = 3){ 
+      winlostText.innerText = " Draw ! "
+    }
     myScoreArea.innerText = myscore
     opponentScoreArea.innerText = opponentscore 
     
@@ -126,37 +129,41 @@ socket.on("choices-from-server",(choicesfromserver) => {
       opponentPointArea.innerText = opponentPoint
     }
 
-
-
     //reset for next 
     choices.forEach((i) => {
       i.className = "choice";
+      i.addEventListener("click",makeChoice)
     })
-    canChoose = false;
+    canChoose = true;
     leftArm.classList.remove("active")
     rightArm.classList.remove("active")
-  },1600)
+  },1900)
   
 })
 
+
+
+choices.forEach((e) => {
+  e.addEventListener("click",makeChoice)
+})
 
 
 function sendChoice(choice){
   socket.emit("choice",choice,socket.id,roomId)
 }
 
-choices.forEach((e) => {
-  e.addEventListener("click",() => {
-    choice = e.id;
-    canChoose = false;
-    if(!canChoose){
-      choices.forEach((i) => {
-        i.className = "disable"
-      })
-    }
-    sendChoice(choice);
-  })
-})
+function makeChoice(){
+  choice = this.id;
+  canChoose = false;
+  if(!canChoose){
+    choices.forEach((i) => {
+      i.removeEventListener("click",makeChoice)
+      i.className = "disable"
+    })
+  }
+  sendChoice(choice);
+}
+
 
 
 //if move1 wins return 1 if move2 wins  return 2 if draw return 3 

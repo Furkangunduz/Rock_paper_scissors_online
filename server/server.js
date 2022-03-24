@@ -3,7 +3,7 @@ const app = express()
 const PORT = process.env.PORT || 3000
 const server = app.listen(PORT)
 
-const {rooms,createRoom,joinRoom} = require("./server-func")
+const {rooms,createRoom,joinRoom,delRoom} = require("./server-func")
 
 var choices = [];
 
@@ -22,9 +22,18 @@ app.get("/",(req,res) => {
 
 
 io.on("connection",(socket) => {
+    let roomName = "";
     console.log(`new connection ${socket.id}`)
 
+    
+    socket.on("disconnect",() => {
+        console.log("user disconnected")
+        delRoom(roomName,socket.id);
+        
+    })
+
     socket.on("create-room",(roomid) => {
+        roomName = roomid
         if(rooms[roomid]) {
             socket.emit("error",("room already exist")) 
             return
@@ -36,6 +45,7 @@ io.on("connection",(socket) => {
     })
     
     socket.on("join-room",(roomid) => {
+        roomName = roomid
         if(!rooms[roomid]) {
             socket.emit("error",("cannot find the room")) 
             return
