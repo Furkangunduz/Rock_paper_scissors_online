@@ -24,7 +24,7 @@ const winlostText = document.getElementById("who-win")
 var audio = document.getElementById("myaudio"); 
 audio.volume = 0.001
 
-const socket = io("http://localhost:3000")
+const socket = io("https://rpsserver0.herokuapp.com/")
 
 var playerOneConnected = false
 var playerTwoConnected = false
@@ -84,6 +84,9 @@ socket.on("player-2-connected",(roomid) => {
     canChoose = true;
     loginScreen.style.display = "none";
     gameScreen.style.display = "flex";
+    choices.forEach((e) => {
+      e.addEventListener("click",makeChoice)
+    })
   }
 })
 
@@ -99,7 +102,7 @@ socket.on("choices-from-server",(choicesfromserver) => {
   leftArm.classList.add("active")
   rightArm.classList.add("active")
   setTimeout(() => {
-    leftImg.src = `/images/left${playerOneMove}.png`
+    leftImg.src = `/images/${playerOneMove}.png`
     rightImg.src = `/images/right${playerTwoMove}.png`
 
     winner = whoWin(playerOneMove,playerTwoMove);
@@ -148,13 +151,6 @@ socket.on("choices-from-server",(choicesfromserver) => {
 
 
 
-choices.forEach((e) => {
-  e.addEventListener("click",makeChoice)
-})
-
-
-
-
 function makeChoice(){
   choice = this.id;
   canChoose = false;
@@ -164,7 +160,7 @@ function makeChoice(){
       i.className = "disable"
     })
   }
-  leftImg.src = `/images/leftrock.png`
+  leftImg.src = `/images/rock.png`
   rightImg.src = `/images/rightrock.png`
   sendChoice(choice);
 }

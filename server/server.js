@@ -5,7 +5,7 @@ const server = app.listen(PORT)
 
 const {rooms,createRoom,joinRoom,delRoom} = require("./server-func")
 
-var choices = [];
+
 
 
 const io = require("socket.io")(server,{ 
@@ -39,10 +39,12 @@ io.on("connection",(socket) => {
             return
         }
         createRoom(roomid,socket.id)
+        rooms[roomid].choices = []
         socket.join(roomid)
         io.to(`${roomid}`).emit("player-1-connected",roomid);
         socket.emit("message","Waiting for player. . .")
     })
+    
     
     socket.on("join-room",(roomid) => {
         roomName = roomid
@@ -56,15 +58,19 @@ io.on("connection",(socket) => {
         socket.emit("player-2-connected",roomid);
         io.to(`${roomid}`).emit("player-2-connected",roomid);
         socket.emit("message",("succesfuly joined"))
+        rooms[roomid].choices = []
     })
 
     socket.on("choice",(choice,id,roomId) => {
-        let x ={"id": id,"choice":choice}
-        choices.push(x)
+        let x 
+        if(choice) x={"id": id,"choice":choice}
+        rooms[roomId].choices.push(x)
         
-        if(choices.length == 2){
-            io.to(`${roomId}`).emit("choices-from-server",choices)
-            choices =[];
+        console.log(rooms[roomId].choices)
+
+        if(rooms[roomId].choices.length == 2){
+            io.to(`${roomId}`).emit("choices-from-server",rooms[roomId].choices)
+            rooms[roomId].choices =[];
         }
 
     })
