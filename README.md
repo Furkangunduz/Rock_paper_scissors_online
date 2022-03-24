@@ -12,4 +12,4 @@
   
   
  
-You can play on : "https://rpsclient.herokuapp.com/"
+You can play on : "https://taskagitmakasonline.herokuapp.com/"
