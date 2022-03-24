@@ -8,6 +8,8 @@ const opponentScoreArea = document.getElementById("opponent-score")
 
 const leftArm  = document.getElementById("left-arm")
 const rightArm = document.getElementById("right-arm")
+const leftImg  = document.getElementById("left-img")
+const rightImg = document.getElementById("right-img")
 
 const roomIdInput = document.getElementById("room-id")
 const joinRoomBtn =  document.getElementById("join-room")
@@ -97,6 +99,9 @@ socket.on("choices-from-server",(choicesfromserver) => {
   leftArm.classList.add("active")
   rightArm.classList.add("active")
   setTimeout(() => {
+    leftImg.src = `/images/left${playerOneMove}.png`
+    rightImg.src = `/images/right${playerTwoMove}.png`
+
     winner = whoWin(playerOneMove,playerTwoMove);
     if(winner == 1) {
       ++myscore; 
@@ -106,7 +111,7 @@ socket.on("choices-from-server",(choicesfromserver) => {
       ++opponentscore; 
       winlostText.innerText = "You Lost !"  
     }
-    if(winner = 3){ 
+    if(winner == 3){ 
       winlostText.innerText = " Draw ! "
     }
     myScoreArea.innerText = myscore
@@ -148,9 +153,7 @@ choices.forEach((e) => {
 })
 
 
-function sendChoice(choice){
-  socket.emit("choice",choice,socket.id,roomId)
-}
+
 
 function makeChoice(){
   choice = this.id;
@@ -161,10 +164,14 @@ function makeChoice(){
       i.className = "disable"
     })
   }
+  leftImg.src = `/images/leftrock.png`
+  rightImg.src = `/images/rightrock.png`
   sendChoice(choice);
 }
 
-
+function sendChoice(choice){
+  socket.emit("choice",choice,socket.id,roomId)
+}
 
 //if move1 wins return 1 if move2 wins  return 2 if draw return 3 
 function whoWin(Move1,Move2){
