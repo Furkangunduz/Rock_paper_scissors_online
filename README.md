@@ -10,6 +10,8 @@
 -  Enjoy ! 
 
   
+  ![game-gif](https://github.com/Furkangunduz/rock-paper-scissors-online/blob/master/game.gif)
+  
   
  
 You can play on : "https://taskagitmakasonline.herokuapp.com/"
